@@ -1,0 +1,5 @@
+.env
+staticfiles
+.hg*
+venv
+*.pyc
