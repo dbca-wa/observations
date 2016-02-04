@@ -1,12 +1,17 @@
 from __future__ import absolute_import
 
+import confy
+confy.read_environment_file(".env")
+
+import django
+django.setup()
+
 from django.conf import settings
 from django.http import HttpResponse
 from django.utils import timezone
 from django.utils.encoding import force_text
 from django.template.defaultfilters import date
 from uwsgidecorators import timer, harakiri
-
 import csv
 import os
 import paramiko
@@ -15,6 +20,7 @@ import sys
 import telnetlib
 from datetime import timedelta
 import logging
+
 
 logger = logging.getLogger(__name__)
 
@@ -99,7 +105,7 @@ def retrieve_observation(args):
     logger.info("Finished collecting observation for %s" % station_name)
     return output
 
-@timer(10)
+@timer(10, target='spooler')
 @harakiri(300)
 def cron(request=None):
     start = timezone.now()
