@@ -85,7 +85,71 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 CORS_ORIGIN_ALLOW_ALL = True
 # TODO: switch to a defined CORS_ORIGIN_WHITELIST
 
-logging.basicConfig(
-    level = logging.WARN,
-    format = '%(asctime)s %(levelname)s %(message)s',
-)
+# Logging settings
+# Ensure that the logs directory exists:
+if not os.path.exists(os.path.join(BASE_DIR, 'logs')):
+    os.mkdir(os.path.join(BASE_DIR, 'logs'))
+LOGGING = {
+    'version': 1,
+    'formatters': {
+        'simple': {
+            'format': '%(levelname)s %(asctime)s %(message)s'
+        },
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'observations.log'),
+            'formatter': 'simple',
+            'maxBytes': 1024 * 1024 * 5,
+            'backupCount': 5,
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['file'],
+            'level': 'INFO'
+        },
+        'log': {
+            'handlers': ['file'],
+            'level': 'INFO'
+        },
+    }
+}
+DEBUG_LOGGING = {
+    'version': 1,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'debug-observations.log'),
+            'formatter': 'verbose',
+            'maxBytes': 1024 * 1024 * 5,
+            'backupCount': 5,
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['file'],
+            'level': 'DEBUG'
+        },
+        'log': {
+            'handlers': ['file'],
+            'level': 'DEBUG'
+        },
+    }
+}
+
+
+# Supplement some settings when DEBUG is True.
+if DEBUG:
+    LOGGING = DEBUG_LOGGING

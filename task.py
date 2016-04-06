@@ -22,7 +22,7 @@ from datetime import timedelta
 import logging
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('log')
 
 from weather.models import WeatherStation, WeatherObservation
 
@@ -161,7 +161,6 @@ def cron(request=None):
                 settings.DAFWA_UPLOAD_PASSWORD,
                 observations
             )
-
 
     delta = timezone.now() - start
     html = "<html><body>Cron run at {} for {}.</body></html>".format(start, delta)

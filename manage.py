@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import os
 import sys
-import hotshot
 import confy
 confy.read_environment_file()
 

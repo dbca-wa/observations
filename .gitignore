@@ -1,5 +1,6 @@
 .env
 staticfiles
-.hg*
+logs
 venv
 *.pyc
+*.swp
